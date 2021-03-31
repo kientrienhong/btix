@@ -10,6 +10,7 @@ class CustomFont extends Text {
       int fontSize,
       FontWeight fontWeight: FontWeight.normal})
       : super(text,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 fontWeight: fontWeight,
                 color: color,

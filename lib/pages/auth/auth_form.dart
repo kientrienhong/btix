@@ -1,9 +1,9 @@
 import 'package:btix/common/custom_color.dart';
 import 'package:btix/common/custom_font.dart';
-import 'package:btix/common/custom_sized_box.dart';
 import 'package:btix/pages/auth/auth_form_bloc.dart';
 import 'package:btix/pages/auth/auth_form_model.dart';
 import 'package:btix/pages/auth/auth_text_form.dart';
+import 'package:btix/pages/home/home_page.dart';
 import 'package:btix/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -105,6 +105,16 @@ class _AuthFormState extends State<AuthForm>
 
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 3,
+            blurRadius: 16,
+            offset: Offset(0, 0), // changes position of shadow
+          ),
+        ],
+      ),
       curve: Curves.easeIn,
       height: _heightContainer,
       width: deviceSize.width / 1.2,
@@ -212,10 +222,14 @@ class _AuthFormState extends State<AuthForm>
                         color: CustomColor.yellow,
                         child: Center(
                           child: InkWell(
-                            // onTap: () {
-                            //   Navigator.of(context)
-                            //       .pushNamed(HomeScreen.routeName);
-                            // },
+                            onTap: () {
+                              Navigator.of(context).push(PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        HomePage(),
+                                transitionDuration: Duration(milliseconds: 750),
+                              ));
+                            },
                             child: Text(
                               textBtn,
                               style: TextStyle(
