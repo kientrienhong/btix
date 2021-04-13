@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -27,6 +27,11 @@ dependencies:
   dio: ^3.0.10
   rxdart: ^0.24.1
   provider: ^4.3.3
+  flutter_rating_bar: ^3.2.0
+  flutter_youtube: ^2.0.0+1
+  collection: ^1.14.9
+
+  # infinite_scroll_pagination: ^3.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -41,7 +46,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -52,6 +56,14 @@ flutter:
     - assets/images/logomobile.png
     - assets/images/profile.png
     - assets/images/lock.png
+    - assets/images/search.png
+    - assets/images/backbutton.png
+    - assets/images/document.png
+    - assets/images/home.png
+    - assets/images/playbutton.png
+    - assets/images/arrowright.png
+    - assets/images/screen.png
+
     # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

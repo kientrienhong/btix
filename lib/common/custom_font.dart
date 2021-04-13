@@ -8,12 +8,14 @@ class CustomFont extends Text {
       Color color,
       BuildContext context,
       int fontSize,
+      TextOverflow textOverflow: TextOverflow.ellipsis,
       FontWeight fontWeight: FontWeight.normal})
       : super(text,
-            overflow: TextOverflow.ellipsis,
+            overflow: textOverflow,
             style: TextStyle(
                 fontWeight: fontWeight,
                 color: color,
+                fontFamily: 'Roboto',
                 fontSize: MediaQuery.of(context).size.width /
                     (widthMockUp / fontSize)));
 }

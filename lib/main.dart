@@ -1,4 +1,5 @@
 import 'package:btix/pages/auth/auth_page.dart';
+import 'package:btix/pages/home/home_page.dart';
 import 'package:btix/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(fontFamily: 'Roboto'),
-        routes: {AuthPage.routeName: (ctx) => AuthPage()},
+        routes: {
+          AuthPage.routeName: (ctx) => AuthPage(),
+          HomePage.routeName: (ctx) => HomePage(),
+        },
       ),
     );
   }

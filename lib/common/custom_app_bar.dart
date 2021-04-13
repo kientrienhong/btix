@@ -12,7 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: Size(double.infinity, 100),
       child: Container(
-        color: CustomColor.black.withOpacity(0),
+        color: Colors.transparent,
         width: MediaQuery.of(context).size.width,
         height: 112,
         child: Row(
@@ -35,10 +35,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       onTap: () => {Navigator.of(context).pop()},
                       child: Image.asset('assets/images/backbutton.png')),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 50, right: 24, bottom: 8),
-              child: Image.asset('assets/images/search.png'),
-            )
+            if (isHome)
+              Padding(
+                padding: const EdgeInsets.only(top: 50, right: 24, bottom: 8),
+                child: Image.asset('assets/images/search.png'),
+              )
           ],
         ),
       ),
