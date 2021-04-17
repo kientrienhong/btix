@@ -7,6 +7,7 @@ import 'package:btix/models/seat.dart';
 import 'package:btix/pages/booking/booking_bloc.dart';
 import 'package:btix/pages/booking/booking_model.dart';
 import 'package:btix/pages/loading/loading_page.dart';
+import 'package:btix/pages/payment/payment_choice_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -465,15 +466,16 @@ class BookingContainer extends StatelessWidget {
                                       child: Center(
                                         child: InkWell(
                                           onTap: () {
-                                            // Navigator.of(context)
-                                            //     .push(PageRouteBuilder(
-                                            //   pageBuilder: (context, animation,
-                                            //           secondaryAnimation) =>
-                                            //       TheatrePage.create(
-                                            //           film: film),
-                                            //   transitionDuration:
-                                            //       Duration(milliseconds: 750),
-                                            // ));
+                                            Navigator.of(context)
+                                                .push(PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  PaymentChoicePayment(
+                                                model: _model,
+                                              ),
+                                              transitionDuration:
+                                                  Duration(milliseconds: 750),
+                                            ));
                                           },
                                           child: CustomFont(
                                             text: 'book now',

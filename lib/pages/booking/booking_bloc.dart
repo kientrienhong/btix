@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:btix/apis/api.dart';
 import 'package:btix/models/room.dart';
 import 'package:btix/models/schedule.dart';

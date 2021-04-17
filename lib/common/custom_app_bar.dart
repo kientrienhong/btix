@@ -1,4 +1,3 @@
-import 'package:btix/common/custom_color.dart';
 import 'package:flutter/material.dart';
 import '../constants/index.dart' as constants;
 
