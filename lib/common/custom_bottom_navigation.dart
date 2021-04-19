@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
   final Size deviceSize;
-  CustomBottomNavigation({this.deviceSize});
+  final Function tapTab;
+  final int index;
+  CustomBottomNavigation({this.deviceSize, this.tapTab, this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,8 @@ class CustomBottomNavigation extends StatelessWidget {
                 backgroundColor: CustomColor.white,
                 type: BottomNavigationBarType.fixed,
                 showSelectedLabels: false,
+                currentIndex: index,
+                onTap: tapTab,
                 showUnselectedLabels: false,
                 items: const <BottomNavigationBarItem>[
                   BottomNavigationBarItem(

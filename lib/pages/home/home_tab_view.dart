@@ -81,75 +81,70 @@ class _HomeTabViewState extends State<HomeTabView> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     HomePageBloc bloc = Provider.of<HomePageBloc>(context, listen: false);
-    return Scaffold(
-        appBar: CustomAppBar(true),
-        body: StreamBuilder(
-            stream: bloc.stream,
-            builder: (ctx, snapshot) {
-              return Stack(children: [
-                CustomSizedBox(
-                  context: context,
-                  height: 24,
+    return StreamBuilder(
+        stream: bloc.stream,
+        builder: (ctx, snapshot) {
+          return Stack(children: [
+            CustomSizedBox(
+              context: context,
+              height: 24,
+            ),
+            Positioned(
+              top: deviceSize.height / 33.833,
+              child: Container(
+                width: deviceSize.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _buildTabText(
+                        context: context,
+                        model: widget.model,
+                        text: 'Hot Movies',
+                        current: TabView.hot),
+                    _buildTabText(
+                        context: context,
+                        model: widget.model,
+                        text: 'Comming soon',
+                        current: TabView.comming),
+                  ],
                 ),
-                Positioned(
-                  top: deviceSize.height / 33.833,
-                  child: Container(
-                    width: deviceSize.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _buildTabText(
-                            context: context,
-                            model: widget.model,
-                            text: 'Hot Movies',
-                            current: TabView.hot),
-                        _buildTabText(
-                            context: context,
-                            model: widget.model,
-                            text: 'Comming soon',
-                            current: TabView.comming),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: deviceSize.height / 13,
-                  child: Container(
-                    width: deviceSize.width,
-                    height: 6,
-                    child: Stack(children: [
-                      _buildAnimationHorizontalSize(
-                          context: context,
-                          deviceSize: deviceSize,
-                          model: widget.model),
-                    ]),
-                  ),
-                ),
-                Positioned(
-                  child: Container(
-                    margin: EdgeInsets.only(top: deviceSize.height / 9),
-                    height: deviceSize.height / 1.2,
-                    child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: widget.model.listFilm.length,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 40),
-                        itemBuilder: (context, index) {
-                          Film film = widget.model.listFilm[index];
-                          film.copyWith(format: 'IMAX');
-                          return FilmWidget(
-                            film: film,
-                            deviceSize: deviceSize,
-                          );
-                        }),
-                  ),
-                ),
-                CustomBottomNavigation(
-                  deviceSize: deviceSize,
-                )
-              ]);
-            }));
+              ),
+            ),
+            Positioned(
+              top: deviceSize.height / 13,
+              child: Container(
+                width: deviceSize.width,
+                height: 6,
+                child: Stack(children: [
+                  _buildAnimationHorizontalSize(
+                      context: context,
+                      deviceSize: deviceSize,
+                      model: widget.model),
+                ]),
+              ),
+            ),
+            Positioned(
+              child: Container(
+                margin: EdgeInsets.only(top: deviceSize.height / 9),
+                height: deviceSize.height / 1.2,
+                child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: widget.model.currentFilm.length,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 40),
+                    itemBuilder: (context, index) {
+                      Film film = widget.model.currentFilm[index];
+                      film.copyWith(format: 'IMAX');
+                      return FilmWidget(
+                        film: film,
+                        deviceSize: deviceSize,
+                      );
+                    }),
+              ),
+            ),
+          ]);
+        });
   }
 }

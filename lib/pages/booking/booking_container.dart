@@ -1,13 +1,14 @@
 import 'package:btix/common/custom_app_bar.dart';
 import 'package:btix/common/custom_color.dart';
 import 'package:btix/common/custom_font.dart';
-import 'package:btix/common/custom_raised_button.dart';
 import 'package:btix/common/custom_sized_box.dart';
 import 'package:btix/models/seat.dart';
+import 'package:btix/models/user.dart';
+import 'package:btix/pages/bill/bill_page.dart';
 import 'package:btix/pages/booking/booking_bloc.dart';
 import 'package:btix/pages/booking/booking_model.dart';
 import 'package:btix/pages/loading/loading_page.dart';
-import 'package:btix/pages/payment/payment_choice_payment.dart';
+import 'package:btix/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -202,7 +203,7 @@ class BookingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final oCcy = new NumberFormat("#,##0", "en_US");
-
+    AuthBase auth = Provider.of<AuthBase>(context, listen: false);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: CustomColor.white,
@@ -274,7 +275,7 @@ class BookingContainer extends StatelessWidget {
                         height: 29,
                       ),
                       Container(
-                        height: deviceSize.height / 2,
+                        height: deviceSize.height / 1.95,
                         child: Stack(
                           children: [
                             Positioned(
@@ -310,10 +311,6 @@ class BookingContainer extends StatelessWidget {
                                   )),
                           ],
                         ),
-                      ),
-                      CustomSizedBox(
-                        context: context,
-                        height: 8,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -465,18 +462,28 @@ class BookingContainer extends StatelessWidget {
                                       color: CustomColor.yellow,
                                       child: Center(
                                         child: InkWell(
-                                          onTap: () {
-                                            Navigator.of(context)
-                                                .push(PageRouteBuilder(
-                                              pageBuilder: (context, animation,
-                                                      secondaryAnimation) =>
-                                                  PaymentChoicePayment(
-                                                model: _model,
-                                              ),
-                                              transitionDuration:
-                                                  Duration(milliseconds: 750),
-                                            ));
-                                          },
+                                          onTap: _model.selectedSeat.length > 0
+                                              ? () async {
+                                                  await bloc.checkOut(
+                                                      auth.user.username,
+                                                      auth.user.accessToken);
+                                                  await auth
+                                                      .updateBillForAccount();
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                          PageRouteBuilder(
+                                                    pageBuilder: (context,
+                                                            animation,
+                                                            secondaryAnimation) =>
+                                                        BillPage(
+                                                      model: _model,
+                                                    ),
+                                                    transitionDuration:
+                                                        Duration(
+                                                            milliseconds: 750),
+                                                  ));
+                                                }
+                                              : null,
                                           child: CustomFont(
                                             text: 'book now',
                                             context: context,

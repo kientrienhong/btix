@@ -26,4 +26,54 @@ class Api {
         'https://movie0706.cybersoft.edu.vn/api/QuanLyDatVe/LayDanhSachPhongVe?MaLichChieu=$idSchedule');
     return reponse.data;
   }
+
+  static Future<Map<String, dynamic>> login(
+      String email, String password) async {
+    final reponse = await Dio().post(
+        'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/DangNhap',
+        data: {'taiKhoan': email, 'matKhau': password});
+    return reponse.data;
+  }
+
+  static Future<Map<String, dynamic>> signUp(
+      String email, String password) async {
+    final reponse = await Dio().post(
+        'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/DangKy',
+        data: {
+          'taiKhoan': email,
+          'matKhau': password,
+          'email': email,
+          'soDT': '',
+          'maNhom': 'GP10',
+          'maLoaiNguoiDung': 'KhacHang',
+          'hoTen': email
+        });
+    return reponse.data;
+  }
+
+  static Future<Map<String, dynamic>> checkOut(
+      String idSchedule,
+      List<Map<String, num>> listSelectedSeat,
+      String username,
+      String accessToken) async {
+    final response = await Dio(BaseOptions(headers: {
+      'Authorization': 'Bearer ' + accessToken,
+    })).post('https://movie0706.cybersoft.edu.vn/api/QuanLyDatVe/DatVe', data: {
+      "maLichChieu": int.parse(idSchedule),
+      "danhSachVe": listSelectedSeat,
+      "taiKhoanNguoiDung": username
+    });
+
+    return response.data;
+  }
+
+  static Future<Map<String, dynamic>> getAccountInfo(String username) async {
+    final response = await Dio().post(
+        'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/ThongTinTaiKhoan',
+        data: {
+          'taiKhoan': username,
+        });
+
+    return response.data;
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:btix/apis/api.dart';
 import 'package:flutter/material.dart';
 import 'package:btix/pages/auth/auth_form_model.dart';
 import 'package:btix/services/auth.dart';
@@ -15,26 +16,67 @@ class AuthFormBloc {
   }
 
   void updateWith(
-      {String email,
-      String password,
-      bool isLoading,
+      {bool isLoading,
       bool isFailure,
-      AuthFormType authFormType}) {
+      AuthFormType authFormType,
+      String error}) {
     _model = _model.copyWith(
-        email: email,
         authFormType: authFormType,
         isLoading: isLoading,
-        password: password,
-        isFailed: isFailure);
+        isFailed: isFailure,
+        errorMsg: error);
 
     _modelController.add(_model);
   }
 
-  void toggleForm(AnimationController controller, AuthFormType current) async {
+  Future<bool> logIn(
+      {@required String username, @required String password}) async {
+    updateWith(isLoading: true);
+    try {
+      await authBase.signInUserName(username, password);
+      updateWith(isFailure: false);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      updateWith(isFailure: true, error: 'Invalid username/password!');
+      return false;
+    } finally {
+      updateWith(isLoading: false);
+    }
+  }
+
+  Future<bool> signUp(@required String username, @required String password,
+      @required String confirm) async {
+    updateWith(isLoading: true);
+    try {
+      if (password != confirm) {
+        updateWith(error: 'Password must match with confirm', isFailure: true);
+        return false;
+      }
+
+      await Api.signUp(username, password);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      updateWith(error: 'Username \'s existed!', isFailure: true);
+      return false;
+    } finally {
+      updateWith(isLoading: false);
+    }
+  }
+
+  void toggleForm(
+      AnimationController controller,
+      AuthFormType current,
+      TextEditingController emailController,
+      TextEditingController passwordController,
+      TextEditingController confirmPasswordController) async {
     if (current == _model.authFormType) {
       return;
     }
-
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController?.clear();
     AuthFormType formType = _model.authFormType == AuthFormType.register
         ? AuthFormType.signIn
         : AuthFormType.register;
@@ -45,6 +87,6 @@ class AuthFormBloc {
       await controller.reverse();
     }
 
-    updateWith(authFormType: formType);
+    updateWith(authFormType: formType, isFailure: false);
   }
 }

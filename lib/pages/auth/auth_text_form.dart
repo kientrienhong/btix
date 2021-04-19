@@ -4,22 +4,21 @@ import 'package:flutter/material.dart';
 class CustomTextForm extends StatelessWidget {
   final String placeHolder;
   final String assetImage;
-  final String authDataType;
   final TextEditingController controller;
   final Size deviceSize;
   final Function validator;
   final bool isSecure;
-  final Map<String, String> authData;
-
+  final FocusNode focusNode;
+  final FocusNode nextFocusNode;
   CustomTextForm({
     this.placeHolder,
+    this.nextFocusNode,
+    this.focusNode,
     this.assetImage,
-    this.authDataType,
     this.controller,
     this.deviceSize,
     this.validator,
     this.isSecure,
-    this.authData,
   });
 
   @override
@@ -30,6 +29,11 @@ class CustomTextForm extends StatelessWidget {
       cursorColor: CustomColor.yellow,
       obscureText: isSecure,
       controller: controller,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (term) {
+        focusNode.unfocus();
+        FocusScope.of(context).requestFocus(nextFocusNode);
+      },
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(bottom: 18),
           labelText: placeHolder,
@@ -74,9 +78,7 @@ class CustomTextForm extends StatelessWidget {
           )),
       keyboardType: TextInputType.emailAddress,
       validator: (value) => validator(value),
-      onSaved: (value) {
-        authData[authDataType] = value;
-      },
+      focusNode: focusNode,
     );
   }
 }

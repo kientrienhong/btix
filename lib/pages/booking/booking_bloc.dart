@@ -105,6 +105,21 @@ class BookingBloc {
     fetchSeat();
   }
 
+  Future<void> checkOut(String username, String accessToken) async {
+    updateWith(isLoading: true);
+    try {
+      List<Map<String, num>> listSelectedSeat = _model.selectedSeat
+          .map((e) => {"maGhe": int.parse(e.id), "giaVe": e.price})
+          .toList();
+      await Api.checkOut(
+          _model.currentSchedule.id, listSelectedSeat, username, accessToken);
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      updateWith(isLoading: false);
+    }
+  }
+
   void fetchSeat() async {
     updateWith(isLoading: true);
     Map<String, dynamic> reponse =

@@ -1,29 +1,25 @@
 enum AuthFormType { signIn, register }
 
 class AuthFormModel {
-  final String email;
-  final String password;
   final bool isLoading;
+  final String errorMsg;
   final bool isFailed;
   final AuthFormType authFormType;
   AuthFormModel(
-      {this.email = '',
-      this.password = '',
-      this.isLoading = false,
+      {this.isLoading = false,
+      this.errorMsg = '',
       this.isFailed = false,
       this.authFormType = AuthFormType.signIn});
 
   AuthFormModel copyWith(
-      {String email,
-      String password,
-      AuthFormType authFormType,
+      {AuthFormType authFormType,
       bool isLoading,
-      bool isFailed}) {
+      bool isFailed,
+      String errorMsg}) {
     return AuthFormModel(
-        email: email ?? this.email,
+        errorMsg: errorMsg ?? this.errorMsg,
         authFormType: authFormType ?? this.authFormType,
         isLoading: isLoading ?? this.isLoading,
-        password: password ?? this.password,
         isFailed: isFailed ?? this.isFailed);
   }
 }

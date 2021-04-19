@@ -86,7 +86,7 @@ class FilmWidget extends StatelessWidget {
               top: deviceSize.height / 31.23076923076923,
               child: Container(
                   height: 18,
-                  width: deviceSize.width / 2.1,
+                  width: deviceSize.width / 2.19,
                   child: CustomFont(
                     text: film.name,
                     color: Colors.black,

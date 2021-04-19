@@ -18,11 +18,17 @@ class HomePageBloc {
     List<dynamic> response = await Api.fetchAllFilm();
     List<Film> listFilm =
         response.map<Film>((json) => Film.fromJson(json)).toList();
-    updateWith(listFilm: listFilm);
+    DateTime now = DateTime.now();
+
+    List<Film> currentFilm =
+        listFilm.where((element) => now.isAfter(element.date)).toList();
+    updateWith(listFilm: listFilm, currentFilm: currentFilm);
   }
 
-  void updateWith({TabView current, List<Film> listFilm}) {
-    _model = _model.copyWith(current: current, listFilm: listFilm);
+  void updateWith(
+      {TabView current, List<Film> listFilm, List<Film> currentFilm}) {
+    _model = _model.copyWith(
+        current: current, listFilm: listFilm, currentFilm: currentFilm);
 
     _controller.add(_model);
   }
@@ -35,6 +41,18 @@ class HomePageBloc {
     TabView newTabView =
         _model.current == TabView.hot ? TabView.comming : TabView.hot;
 
-    updateWith(current: newTabView);
+    DateTime now = DateTime.now();
+    List<Film> currentFilm;
+    if (newTabView == TabView.hot) {
+      currentFilm = _model.listFilm
+          .where((element) => now.isAfter(element.date))
+          .toList();
+    } else {
+      currentFilm = _model.listFilm
+          .where((element) => element.date.isAfter(now))
+          .toList();
+    }
+
+    updateWith(current: newTabView, currentFilm: currentFilm);
   }
 }

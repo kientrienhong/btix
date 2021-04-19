@@ -4,6 +4,7 @@ class Seat {
   final String id;
   final String name;
   final String idTheatre;
+  final String nameTheatre;
   final String no;
   final double price;
   final bool isSold;
@@ -11,6 +12,7 @@ class Seat {
   Seat(
       {this.statusSeat: StatusSeat.available,
       this.id,
+      this.nameTheatre,
       this.name,
       this.idTheatre,
       this.no,
@@ -24,16 +26,17 @@ class Seat {
       String no,
       double price,
       StatusSeat statusSeat,
+      String nameTheatre,
       bool isSold}) {
     return Seat(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      idTheatre: idTheatre ?? this.idTheatre,
-      no: no ?? this.no,
-      price: price ?? this.price,
-      statusSeat: statusSeat ?? this.statusSeat,
-      isSold: isSold ?? this.isSold,
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        idTheatre: idTheatre ?? this.idTheatre,
+        no: no ?? this.no,
+        price: price ?? this.price,
+        statusSeat: statusSeat ?? this.statusSeat,
+        isSold: isSold ?? this.isSold,
+        nameTheatre: nameTheatre ?? this.nameTheatre);
   }
 
   factory Seat.fromJson(Map<String, dynamic> json) {

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:btix/common/custom_color.dart';
 import 'package:btix/common/custom_font.dart';
+import 'package:btix/common/custom_sized_box.dart';
 import 'package:btix/models/film.dart';
 import 'package:btix/pages/theatre/theatre_page.dart';
 import 'package:flutter/material.dart';
@@ -146,6 +147,34 @@ class DetailFilmPage extends StatelessWidget {
                     fontSize: 12,
                   )),
               Positioned(
+                  top: deviceSize.height / 2.44,
+                  left: deviceSize.width / 2.3,
+                  child: Row(
+                    children: [
+                      RatingBarIndicator(
+                        rating: film.ratingAverage / 2,
+                        itemBuilder: (context, index) => Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        itemCount: 5,
+                        itemSize: 18,
+                        direction: Axis.horizontal,
+                      ),
+                      CustomSizedBox(
+                        context: context,
+                        width: 8,
+                      ),
+                      CustomFont(
+                        text: film.ratingAverage.toString() + '.0',
+                        color: CustomColor.yellow,
+                        context: context,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      )
+                    ],
+                  )),
+              Positioned(
                   top: deviceSize.height / 2.63,
                   left: deviceSize.width / 2.3,
                   child: CustomFont(
@@ -156,129 +185,115 @@ class DetailFilmPage extends StatelessWidget {
                     fontSize: 12,
                   )),
               Positioned(
-                top: deviceSize.height / 2.44,
-                left: deviceSize.width / 2.3,
-                child: RatingBarIndicator(
-                  rating: film.ratingAverage / 2,
-                  itemBuilder: (context, index) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  itemCount: 5,
-                  itemSize: 18,
-                  direction: Axis.horizontal,
-                ),
-              ),
-              Positioned(
-                  top: deviceSize.height / 2.43,
-                  left: deviceSize.width / 1.5,
-                  child: CustomFont(
-                    text: film.ratingAverage.toString() + '.0',
-                    color: CustomColor.yellow,
-                    context: context,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  )),
-              Positioned(
                 top: deviceSize.height / 2.1,
                 left: deviceSize.width / 15,
-                child: CustomFont(
-                  text: 'Introdution',
-                  color: CustomColor.black[4],
-                  fontWeight: FontWeight.bold,
-                  context: context,
-                  fontSize: 20,
-                ),
-              ),
-              Positioned(
-                  top: deviceSize.height / 1.8,
-                  left: deviceSize.width / 15,
-                  child: Container(
-                    width: deviceSize.width * 5 / 6,
-                    height: deviceSize.height * 1 / 3,
-                    child: Text(
-                      film.description,
-                      maxLines: 5,
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                          height: deviceSize.width / 225,
-                          letterSpacing: deviceSize.width / 250,
-                          color: Color(0xFF130F26),
-                          fontWeight: FontWeight.w300,
-                          fontSize: deviceSize.width / 31.25),
-                    ),
-                  )),
-              Positioned(
-                top: deviceSize.height / 1.3,
-                left: deviceSize.width * 1 / 15,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    width: deviceSize.width * 5 / 6,
-                    height: deviceSize.height * 1 / 5,
-                    color: CustomColor.black[2],
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: deviceSize.height * 1 / 18,
-                          left: deviceSize.width * 1 / 3,
-                          child: GestureDetector(
-                            onTap: () {
-                              FlutterYoutube.playYoutubeVideoByUrl(
-                                  apiKey:
-                                      "AIzaSyCNgLFZaHoTlV8vZmXNyjxmD3EsMT0-V78",
-                                  videoUrl: film.trailer,
-                                  autoPlay: true, //default falase
-                                  fullScreen: true
-                                  //default false
-                                  );
-                            },
-                            child: Container(
-                              width: deviceSize.width * 1 / 5,
-                              height: deviceSize.width * 1 / 5,
-                              child: Image.asset(
-                                'assets/images/playbutton.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: deviceSize.height / 1,
-                left: deviceSize.width * 1 / 3.8,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: deviceSize.width / 2.1,
-                    height: deviceSize.height / 14,
-                    color: CustomColor.yellow,
-                    child: Center(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    TheatrePage.create(film: film),
-                            transitionDuration: Duration(milliseconds: 750),
-                          ));
-                        },
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomFont(
+                        text: 'Introdution',
+                        color: CustomColor.black[4],
+                        fontWeight: FontWeight.bold,
+                        context: context,
+                        fontSize: 20,
+                      ),
+                      CustomSizedBox(
+                        context: context,
+                        height: 16,
+                      ),
+                      Container(
+                        width: deviceSize.width * 5 / 6,
+                        height: deviceSize.height * 1 / 4,
                         child: Text(
-                          'Buy Ticket',
+                          film.description,
+                          maxLines: 5,
+                          textAlign: TextAlign.justify,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.bold,
-                              fontSize: deviceSize.height / 34),
+                              height: deviceSize.width / 225,
+                              letterSpacing: deviceSize.width / 250,
+                              color: Color(0xFF130F26),
+                              fontWeight: FontWeight.w300,
+                              fontSize: deviceSize.width / 31.25),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              )
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Container(
+                          width: deviceSize.width * 5 / 6,
+                          height: deviceSize.height * 1 / 5,
+                          color: CustomColor.black[2],
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: deviceSize.height * 1 / 18,
+                                left: deviceSize.width * 1 / 3,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    FlutterYoutube.playYoutubeVideoByUrl(
+                                        apiKey:
+                                            "AIzaSyCNgLFZaHoTlV8vZmXNyjxmD3EsMT0-V78",
+                                        videoUrl: film.trailer,
+                                        autoPlay: true, //default falase
+                                        fullScreen: true
+                                        //default false
+                                        );
+                                  },
+                                  child: Container(
+                                    width: deviceSize.width * 1 / 5,
+                                    height: deviceSize.width * 1 / 5,
+                                    child: Image.asset(
+                                      'assets/images/playbutton.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      CustomSizedBox(
+                        context: context,
+                        height: 16,
+                      ),
+                      Container(
+                        width: deviceSize.width * 5 / 6,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  width: deviceSize.width / 2.1,
+                                  height: deviceSize.height / 14,
+                                  color: CustomColor.yellow,
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              TheatrePage.create(film: film),
+                                          transitionDuration:
+                                              Duration(milliseconds: 750),
+                                        ));
+                                      },
+                                      child: Text(
+                                        'Buy Ticket',
+                                        style: TextStyle(
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: deviceSize.height / 34),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ]),
+              ),
             ],
           ),
         ),

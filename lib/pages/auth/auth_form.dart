@@ -1,8 +1,10 @@
 import 'package:btix/common/custom_color.dart';
 import 'package:btix/common/custom_font.dart';
+import 'package:btix/helpers/validation.dart';
 import 'package:btix/pages/auth/auth_form_bloc.dart';
 import 'package:btix/pages/auth/auth_form_model.dart';
 import 'package:btix/pages/auth/auth_text_form.dart';
+import 'package:btix/pages/bottom_tab_view/bottom_tab_view.dart';
 import 'package:btix/pages/home/home_page.dart';
 import 'package:btix/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,16 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmController = TextEditingController();
+  FocusNode _usernameNode = FocusNode();
+  FocusNode _passwordNode = FocusNode();
+  FocusNode _confirmNode = FocusNode();
+
+  String get _username => _usernameController.text;
+  String get _password => _passwordController.text;
+  String get _confirm => _confirmController.text;
 
   Animation<double> _opacityAnimation;
   Animation<double> _forgetPasswordAnimation;
@@ -50,6 +62,11 @@ class _AuthFormState extends State<AuthForm>
   void dispose() {
     super.dispose();
     _animationController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _usernameNode.dispose();
+    _passwordNode.dispose();
+    _confirmNode.dispose();
   }
 
   Widget _buildCategoryAuthenText(
@@ -63,7 +80,8 @@ class _AuthFormState extends State<AuthForm>
         : CustomColor.black[2];
     return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       GestureDetector(
-          onTap: () => widget.bloc.toggleForm(_animationController, current),
+          onTap: () => widget.bloc.toggleForm(_animationController, current,
+              _usernameController, _passwordController, _confirmController),
           child: CustomFont(
             text: text,
             color: color,
@@ -89,12 +107,14 @@ class _AuthFormState extends State<AuthForm>
   }
 
   Widget _buildFormContainer({Size deviceSize, AuthFormModel model}) {
+    final _formKey = GlobalKey<FormState>();
+
     final authFormType = model.authFormType;
     final _heightContainer = authFormType == AuthFormType.register
         ? deviceSize.height / 1.5 - deviceSize.height / 17.5
         : deviceSize.height / 1.5 - deviceSize.height / 7;
     final _maxHeightForgetPassword =
-        authFormType == AuthFormType.register ? 0.0 : 20.0;
+        authFormType == AuthFormType.register ? 0.0 : 30.0;
     final _minHeightForgetPassword =
         authFormType == AuthFormType.register ? 0.0 : 10.0;
     final textBtn = authFormType == AuthFormType.signIn ? 'Sign in' : 'Sign up';
@@ -126,7 +146,7 @@ class _AuthFormState extends State<AuthForm>
             width: deviceSize.width * 0.75,
             padding: EdgeInsets.all(16.0),
             child: Form(
-              // key: _formKey,
+              key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -137,14 +157,14 @@ class _AuthFormState extends State<AuthForm>
                           7.65,
                     ),
                     CustomTextForm(
+                      validator: Validation.validatorEmail,
                       placeHolder: 'Email',
                       assetImage: 'assets/images/profile.png',
-                      // validator: _validatorEmail,
-                      // authData: _authData,
-                      controller: null,
+                      controller: _usernameController,
                       isSecure: false,
-                      authDataType: 'email',
+                      focusNode: _usernameNode,
                       deviceSize: deviceSize,
+                      nextFocusNode: _passwordNode,
                     ),
                     SizedBox(
                       height: (deviceSize.height / 1.81 -
@@ -152,14 +172,14 @@ class _AuthFormState extends State<AuthForm>
                           10.2,
                     ),
                     CustomTextForm(
+                      validator: Validation.validatorPassword,
                       placeHolder: 'Password',
                       assetImage: 'assets/images/lock.png',
-                      // validator: _validatorPassword,
-                      // authData: _authData,
-                      // controller: _passwordController,
+                      controller: _passwordController,
                       isSecure: true,
-                      authDataType: 'password',
                       deviceSize: deviceSize,
+                      focusNode: _passwordNode,
+                      nextFocusNode: _confirmNode,
                     ),
                     if (authFormType == AuthFormType.signIn)
                       SizedBox(
@@ -175,12 +195,14 @@ class _AuthFormState extends State<AuthForm>
                       curve: Curves.easeIn,
                       child: FadeTransition(
                         opacity: _forgetPasswordAnimation,
-                        child: CustomFont(
-                            context: context,
-                            text: 'Forgot Password?',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: CustomColor.yellow),
+                        child: Container(
+                          child: CustomFont(
+                              context: context,
+                              text: 'Forgot Password?',
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColor.yellow),
+                        ),
                       ),
                     ),
                     if (authFormType == AuthFormType.register)
@@ -189,31 +211,44 @@ class _AuthFormState extends State<AuthForm>
                                 deviceSize.height / 17.5) /
                             10.2,
                       ),
-                    AnimatedContainer(
-                      constraints: BoxConstraints(
-                          minHeight: _minHeightForgetPasswordContainer,
-                          maxHeight: _maxHeightForgetPasswordContainer),
-                      duration: Duration(milliseconds: 400),
-                      curve: Curves.easeIn,
-                      child: FadeTransition(
-                        opacity: _opacityAnimation,
-                        child: CustomTextForm(
-                          placeHolder: 'Confirm password',
-                          assetImage: 'assets/images/lock.png',
-                          // validator: _validatorConfirmPassword,
-                          // authData: _authData,
-                          controller: null,
-                          isSecure: true,
-                          authDataType: 'password',
-                          deviceSize: deviceSize,
+                    if (authFormType == AuthFormType.register)
+                      AnimatedContainer(
+                        constraints: BoxConstraints(
+                            minHeight: _minHeightForgetPasswordContainer,
+                            maxHeight: _maxHeightForgetPasswordContainer),
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.easeIn,
+                        child: FadeTransition(
+                          opacity: _opacityAnimation,
+                          child: CustomTextForm(
+                            validator: Validation.validatorPassword,
+                            placeHolder: 'Confirm password',
+                            assetImage: 'assets/images/lock.png',
+                            controller: _confirmController,
+                            isSecure: true,
+                            deviceSize: deviceSize,
+                            focusNode: _confirmNode,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: (deviceSize.height / 1.81 -
-                              deviceSize.height / 17.5) /
-                          10.2,
-                    ),
+                    model.isFailed == true
+                        ? Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.only(bottom: 8, top: 8),
+                            child: CustomFont(
+                              text: model.errorMsg,
+                              color: Colors.red,
+                              fontSize: 16,
+                              context: context,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : Container(
+                            margin: EdgeInsets.only(
+                                bottom: (deviceSize.height / 1.81 -
+                                        deviceSize.height / 17.5) /
+                                    10.2),
+                          ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
@@ -222,21 +257,41 @@ class _AuthFormState extends State<AuthForm>
                         color: CustomColor.yellow,
                         child: Center(
                           child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        HomePage(),
-                                transitionDuration: Duration(milliseconds: 750),
-                              ));
+                            onTap: () async {
+                              if (_formKey.currentState.validate()) {
+                                bool result = false;
+
+                                if (model.authFormType == AuthFormType.signIn) {
+                                  result = await widget.bloc.logIn(
+                                      username: _username, password: _password);
+                                } else {
+                                  await widget.bloc
+                                      .signUp(_username, _password, _confirm);
+                                }
+                                if (result == true) {
+                                  Navigator.of(context)
+                                      .pushReplacement(PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        BottomTabView(),
+                                    transitionDuration:
+                                        Duration(milliseconds: 750),
+                                  ));
+                                }
+                              }
                             },
-                            child: Text(
-                              textBtn,
-                              style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: deviceSize.height / 34),
-                            ),
+                            child: model.isLoading == true
+                                ? CircularProgressIndicator(
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            CustomColor.white))
+                                : Text(
+                                    textBtn,
+                                    style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: deviceSize.height / 34),
+                                  ),
                           ),
                         ),
                       ),
