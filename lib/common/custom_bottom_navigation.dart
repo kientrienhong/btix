@@ -1,4 +1,5 @@
 import 'package:btix/common/custom_color.dart';
+import 'package:btix/common/custom_font.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigation extends StatelessWidget {

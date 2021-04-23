@@ -1,10 +1,11 @@
+import 'package:btix/common/custom_font.dart';
 import 'package:flutter/material.dart';
 import '../constants/index.dart' as constants;
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   bool isHome;
-
-  CustomAppBar(this.isHome);
+  String name;
+  CustomAppBar({this.isHome, this.name: ''});
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +35,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       onTap: () => {Navigator.of(context).pop()},
                       child: Image.asset('assets/images/backbutton.png')),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 50, left: 24, bottom: 8),
+              child: CustomFont(
+                text: name,
+                color: Colors.black,
+                context: context,
+                fontSize: 14,
+              ),
+            ),
             if (isHome)
               Padding(
                 padding: const EdgeInsets.only(top: 50, right: 24, bottom: 8),
                 child: Image.asset('assets/images/search.png'),
+              ),
+            if (!isHome)
+              Container(
+                width: 24,
               )
           ],
         ),

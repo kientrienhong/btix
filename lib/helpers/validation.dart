@@ -14,4 +14,12 @@ class Validation {
 
     return null;
   }
+
+  static String isEmpty(String value) {
+    if (value.isEmpty) {
+      return '* Required';
+    }
+
+    return null;
+  }
 }

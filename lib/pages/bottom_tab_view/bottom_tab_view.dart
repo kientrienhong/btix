@@ -35,7 +35,7 @@ class _BottomTabViewState extends State<BottomTabView> {
       resizeToAvoidBottomPadding: false,
       body: Column(
         children: [
-          CustomAppBar(true),
+          CustomAppBar(isHome: true),
           Expanded(
             child: IndexedStack(
               index: _index,

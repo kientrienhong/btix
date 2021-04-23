@@ -6,10 +6,16 @@ abstract class AuthBase {
   Future<void> signInUserName(String username, String password);
   Future<void> signUpUserName(String username, String password);
   Future<void> updateBillForAccount();
+  void updateUser(User newUser);
 }
 
 class Auth implements AuthBase {
   User user;
+
+  @override
+  void updateUser(User newUser) {
+    user = newUser;
+  }
 
   @override
   Future<void> signInUserName(String username, String password) async {

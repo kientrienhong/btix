@@ -1,3 +1,5 @@
+import 'package:btix/models/user.dart';
+import 'package:btix/services/auth.dart';
 import 'package:dio/dio.dart';
 
 class Api {
@@ -74,6 +76,27 @@ class Api {
           'taiKhoan': username,
         });
 
+    return response.data;
+  }
+
+  static Future<Map<String, dynamic>> updateAccountInfo(User user,
+      {String password}) async {
+    final userInfo = await getAccountInfo(user.username);
+    final response = await Dio(BaseOptions(headers: {
+      'Authorization': 'Bearer ' + user.accessToken,
+    })).put(
+        'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung',
+        data: {
+          "taiKhoan": user.username,
+          'matKhau': password == null ? userInfo['matKhau'] : password,
+          "email": user.email,
+          "soDt": user.phone,
+          "maNhom": 'GP10',
+          "maLoaiNguoiDung": 'KhachHang',
+          "hoTen": user.name
+        });
+
+    print(password);
     return response.data;
   }
 }

@@ -218,7 +218,7 @@ class BookingContainer extends StatelessWidget {
                 child: Stack(children: [
                   Column(
                     children: [
-                      CustomAppBar(false),
+                      CustomAppBar(isHome: false),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Padding(

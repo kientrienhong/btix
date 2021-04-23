@@ -5,7 +5,6 @@ import 'package:btix/pages/auth/auth_form_bloc.dart';
 import 'package:btix/pages/auth/auth_form_model.dart';
 import 'package:btix/pages/auth/auth_text_form.dart';
 import 'package:btix/pages/bottom_tab_view/bottom_tab_view.dart';
-import 'package:btix/pages/home/home_page.dart';
 import 'package:btix/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +31,8 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm>
     with SingleTickerProviderStateMixin {
+  final _formKey = GlobalKey<FormState>();
+
   AnimationController _animationController;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -107,8 +108,6 @@ class _AuthFormState extends State<AuthForm>
   }
 
   Widget _buildFormContainer({Size deviceSize, AuthFormModel model}) {
-    final _formKey = GlobalKey<FormState>();
-
     final authFormType = model.authFormType;
     final _heightContainer = authFormType == AuthFormType.register
         ? deviceSize.height / 1.5 - deviceSize.height / 17.5

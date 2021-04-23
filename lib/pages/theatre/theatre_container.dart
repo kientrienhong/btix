@@ -30,7 +30,7 @@ class TheatreContainer extends StatelessWidget {
     final deviceSize = MediaQuery.of(context).size;
     TheatreBloc bloc = Provider.of<TheatreBloc>(context, listen: false);
     return Scaffold(
-      appBar: CustomAppBar(false),
+      appBar: CustomAppBar(isHome: false),
       body: StreamBuilder(
           stream: bloc.stream,
           builder: (context, snapshot) {
